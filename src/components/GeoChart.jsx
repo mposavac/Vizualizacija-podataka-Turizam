@@ -1,8 +1,8 @@
-import React, { useRef, useEffect, useState } from "react";
-import { select, geoPath, geoMercator, min, max, scaleLinear } from "d3";
-import useResize from "../utils/useResize";
+import React, { useRef, useEffect, useState } from 'react';
+import { select, geoPath, geoMercator, min, max, scaleLinear } from 'd3';
+import useResize from '../utils/useResize';
 
-function GeoChart({ geoData, data, property, changeGeoData }) {
+function GeoChart({ geoData, data, property }) {
   const svgRef = useRef();
   const refWrapper = useRef();
   const dimensions = useResize(refWrapper);
@@ -10,16 +10,11 @@ function GeoChart({ geoData, data, property, changeGeoData }) {
 
   useEffect(() => {
     const svg = select(svgRef.current);
-    const minProp = min(data, (feature) =>
-      feature[property] !== "" ? feature[property] : null
-    );
+    const minProp = min(data, (feature) => (feature[property] !== '' ? feature[property] : null));
     const maxProp = max(data, (feature) => feature[property]);
-    const colorScale = scaleLinear()
-      .domain([minProp, maxProp])
-      .range(["lightgray", "green"]);
+    const colorScale = scaleLinear().domain([minProp, maxProp]).range(['lightgray', 'green']);
 
-    const { width, height } =
-      dimensions || refWrapper.current.getBoundingClientRect();
+    const { width, height } = dimensions || refWrapper.current.getBoundingClientRect();
     const projection = geoMercator()
       .fitSize([width, height], countrySelected || geoData)
       .precision(100);
@@ -27,24 +22,21 @@ function GeoChart({ geoData, data, property, changeGeoData }) {
     const pathGenerator = geoPath().projection(projection);
 
     svg
-      .selectAll(".country")
+      .selectAll('.country')
       .data(geoData.features)
-      .join("path")
-      .on("click", (feature) => {
-        if (feature.properties["sovereignt"] === "Croatia") changeGeoData();
-        else setConutrySelected(countrySelected === feature ? null : feature);
+      .join('path')
+      .on('click', (feature) => {
+        setConutrySelected(countrySelected === feature ? null : feature);
       })
-      .attr("class", "country")
+      .attr('class', 'country')
       .transition()
-      .attr("fill", (feature) =>
+      .attr('fill', (feature) =>
         colorScale(
-          feature.properties.tourism.length > 0
-            ? feature.properties.tourism[0][property]
-            : 0
-        )
+          feature.properties.tourism.length > 0 ? feature.properties.tourism[0][property] : 0,
+        ),
       )
-      .attr("d", (feature) => pathGenerator(feature));
-  }, [geoData, data, property, dimensions, countrySelected, changeGeoData]);
+      .attr('d', (feature) => pathGenerator(feature));
+  }, [geoData, data, property, dimensions, countrySelected]);
   return (
     <div className="svg-wrapper" ref={refWrapper}>
       <svg ref={svgRef} />

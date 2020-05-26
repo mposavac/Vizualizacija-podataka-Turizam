@@ -1,0 +1,34 @@
+{
+  "parser": "babel-eslint",
+  "extends": ["airbnb", "react-app", "prettier"],
+  "plugins": ["prettier"],
+  "env": {
+    "jest": true,
+    "browser": true
+  },
+  "rules": {
+    "prettier/prettier": ["error"],
+    "import/no-extraneous-dependencies": [
+      "error",
+      {
+        "devDependencies": [
+          "src/setupTests.js",
+          "**/tests/*.js",
+          "**/tests/*.jsx",
+          "**/*.test.js",
+          "**/*.test.jsx"
+        ],
+        "optionalDependencies": false,
+        "peerDependencies": false
+      }
+    ],
+    "import/prefer-default-export": false
+  },
+  "settings": {
+    "import/resolver": {
+      "node": {
+        "moduleDirectory": ["node_modules", "src/"]
+      }
+    }
+  }
+}
