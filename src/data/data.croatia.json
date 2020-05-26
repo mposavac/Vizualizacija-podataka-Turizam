@@ -1,0 +1,191 @@
+[
+  {
+    "2016": 75527,
+    "2017": 86501,
+    "2018": 122950,
+    "2019": 139913,
+    "Županije": "ZAGREBAČKA",
+    "Mjesec": "UKUPNO",
+    "Tip": "Dolasci"
+  },
+  {
+    "2016": 124585,
+    "2017": 142313,
+    "2018": 160669,
+    "2019": 177835,
+    "Županije": "KRAPINSKO-ZAGORSKA",
+    "Mjesec": "UKUPNO",
+    "Tip": "Dolasci"
+  },
+  {
+    "2016": 29579,
+    "2017": 36640,
+    "2018": 38629,
+    "2019": 38021,
+    "Županije": "SISAČKO-MOSLAVAČKA",
+    "Mjesec": "UKUPNO",
+    "Tip": "Dolasci"
+  },
+  {
+    "2016": 278965,
+    "2017": 332991,
+    "2018": 353264,
+    "2019": 364517,
+    "Županije": "KARLOVAČKA",
+    "Mjesec": "UKUPNO",
+    "Tip": "Dolasci"
+  },
+  {
+    "2016": 52008,
+    "2017": 61257,
+    "2018": 71150,
+    "2019": 81284,
+    "Županije": "VARAŽDINSKA",
+    "Mjesec": "UKUPNO",
+    "Tip": "Dolasci"
+  },
+  {
+    "2016": 18864,
+    "2017": 18537,
+    "2018": 19591,
+    "2019": 18924,
+    "Županije": "KOPRIVNIČKO-KRIŽEVAČKA",
+    "Mjesec": "UKUPNO",
+    "Tip": "Dolasci"
+  },
+  {
+    "2016": 20490,
+    "2017": 22556,
+    "2018": 24830,
+    "2019": 24323,
+    "Županije": "BJELOVARSKO-BILOGORSKA",
+    "Mjesec": "UKUPNO",
+    "Tip": "Dolasci"
+  },
+  {
+    "2016": 2598437,
+    "2017": 2789179,
+    "2018": 2909914,
+    "2019": 2966489,
+    "Županije": "PRIMORSKO-GORANSKA",
+    "Mjesec": "UKUPNO",
+    "Tip": "Dolasci"
+  },
+  {
+    "2016": 621129,
+    "2017": 736284,
+    "2018": 789330,
+    "2019": 820648,
+    "Županije": "LIČKO-SENJSKA",
+    "Mjesec": "UKUPNO",
+    "Tip": "Dolasci"
+  },
+  {
+    "2016": 12789,
+    "2017": 14184,
+    "2018": 18023,
+    "2019": 16710,
+    "Županije": "VIROVITIČKO-PODRAVSKA",
+    "Mjesec": "UKUPNO",
+    "Tip": "Dolasci"
+  },
+  {
+    "2016": 11654,
+    "2017": 13284,
+    "2018": 16252,
+    "2019": 19706,
+    "Županije": "POŽEŠKO-SLAVONSKA",
+    "Mjesec": "UKUPNO",
+    "Tip": "Dolasci"
+  },
+  {
+    "2016": 26569,
+    "2017": 28614,
+    "2018": 34500,
+    "2019": 36759,
+    "Županije": "BRODSKO-POSAVSKA",
+    "Mjesec": "UKUPNO",
+    "Tip": "Dolasci"
+  },
+  {
+    "2016": 1362206,
+    "2017": 1559419,
+    "2018": 1664467,
+    "2019": 1751741,
+    "Županije": "ZADARSKA",
+    "Mjesec": "UKUPNO",
+    "Tip": "Dolasci"
+  },
+  {
+    "2016": 89060,
+    "2017": 92239,
+    "2018": 99025,
+    "2019": 107598,
+    "Županije": "OSJEČKO-BARANJSKA",
+    "Mjesec": "UKUPNO",
+    "Tip": "Dolasci"
+  },
+  {
+    "2016": 817755,
+    "2017": 923233,
+    "2018": 965203,
+    "2019": 1009451,
+    "Županije": "ŠIBENSKO-KNINSKA",
+    "Mjesec": "UKUPNO",
+    "Tip": "Dolasci"
+  },
+  {
+    "2016": 69818,
+    "2017": 88942,
+    "2018": 80536,
+    "2019": 80549,
+    "Županije": "VUKOVARSKO-SRIJEMSKA",
+    "Mjesec": "UKUPNO",
+    "Tip": "Dolasci"
+  },
+  {
+    "2016": 2737304,
+    "2017": 3159851,
+    "2018": 3474145,
+    "2019": 3657001,
+    "Županije": "SPLITSKO-DALMATINSKA",
+    "Mjesec": "UKUPNO",
+    "Tip": "Dolasci"
+  },
+  {
+    "2016": 3763174,
+    "2017": 4104018,
+    "2018": 4332752,
+    "2019": 4481698,
+    "Županije": "ISTARSKA",
+    "Mjesec": "UKUPNO",
+    "Tip": "Dolasci"
+  },
+  {
+    "2016": 1598767,
+    "2017": 1864114,
+    "2018": 2014734,
+    "2019": 2237036,
+    "Županije": "DUBROVAČKO-NERETVANSKA",
+    "Mjesec": "UKUPNO",
+    "Tip": "Dolasci"
+  },
+  {
+    "2016": 45880,
+    "2017": 70337,
+    "2018": 76415,
+    "2019": 81924,
+    "Županije": "MEĐIMURSKA",
+    "Mjesec": "UKUPNO",
+    "Tip": "Dolasci"
+  },
+  {
+    "2016": 1108600,
+    "2017": 1286087,
+    "2018": 1400201,
+    "2019": 1454019,
+    "Županije": "GRAD ZAGREB",
+    "Mjesec": "UKUPNO",
+    "Tip": "Dolasci"
+  }
+]
