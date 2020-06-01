@@ -1,13 +1,17 @@
 import React, { useState, useEffect } from 'react';
+import { connect } from 'react-redux';
 import GeoChart from './components/GeoChart';
+import AreaChart from './components/AreaChart';
+import PieChart from './components/PieChart';
 import Controls from './components/Controls';
 import world from './data/GeoChart.world.geo.json';
 import croatia from './data/GeoChart.croatia.geo.json';
 import world_data from './data/data.world.json';
 import croatia_data from './data/data.croatia.json';
+import croatia_bymonths_data from './data/data2019-2020.croatia.json';
 import './style/index.scss';
 
-function App() {
+function App({ countrySelected }) {
   const [geoData, setGeoData] = useState(world);
   const [data, setData] = useState(world_data);
   const [dataReady, setDataReady] = useState(false);
@@ -24,7 +28,6 @@ function App() {
     },
   };
   const [year, setYear] = useState(yearsRange.world.min);
-
   useEffect(() => {
     if (geoData === world) {
       geoData.features.forEach((feature) => {
@@ -40,7 +43,13 @@ function App() {
           (country) =>
             country['Županije'].toLowerCase() === feature.properties['name'].toLowerCase(),
         );
-        feature.properties.tourism = tourism_data;
+
+        const bymonths_data = croatia_bymonths_data.filter(
+          (country) =>
+            country['Prostorna jedinica'].toLowerCase() ===
+            feature.properties['name'].toLowerCase(),
+        );
+        feature.properties.tourism = [...tourism_data, ...bymonths_data];
       });
       setDataReady(true);
     }
@@ -52,13 +61,16 @@ function App() {
         const yearIncreased = year + 1;
         setYear(yearIncreased);
       }, 1000);
-      return () => clearTimeout(timeout);
-    }
+      return () => {
+        clearTimeout(timeout);
+      };
+    } else setIsPlayed(false);
     //eslint-disable-next-line
   }, [isPlayed, year, setYear]);
 
   const handleBtnClick = (e) => {
     setDataReady(false);
+    setIsPlayed(false);
     if (e.target.getAttribute('class') === 'btn-world') {
       setGeoData(world);
       setData(world_data);
@@ -78,15 +90,22 @@ function App() {
   };
 
   const play = async () => {
+    if (dataIndicator === 'world' && year === yearsRange.world.max) setYear(yearsRange.world.min);
+    if (dataIndicator === 'croatia' && year === yearsRange.croatia.max)
+      setYear(yearsRange.croatia.min);
     if (isPlayed) setIsPlayed(false);
-    else {
-      setIsPlayed(true);
-    }
+    else setIsPlayed(true);
   };
 
   return (
     <div className="home">
-      {dataReady && <GeoChart geoData={geoData} data={data} property={year} />}
+      {dataReady && (
+        <GeoChart geoData={geoData} data={data} property={year} dataIndicator={dataIndicator} />
+      )}
+      {countrySelected && (
+        <AreaChart data={countrySelected} year={year} dataIndicator={dataIndicator} />
+      )}
+
       <Controls
         handleBtnClick={handleBtnClick}
         handleYearChange={handleYearChange}
@@ -100,4 +119,7 @@ function App() {
   );
 }
 
-export default App;
+const mapStateToProps = (state) => ({
+  countrySelected: state.countrySelected,
+});
+export default connect(mapStateToProps)(App);
