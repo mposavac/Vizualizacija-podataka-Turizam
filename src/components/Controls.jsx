@@ -1,5 +1,9 @@
 import React, { useEffect } from 'react';
 import TextTransition, { presets } from 'react-text-transition';
+import Slider from 'rc-slider';
+import world_img from '../assets/world.png';
+import croatia_img from '../assets/croatia.png';
+import 'rc-slider/assets/index.css';
 
 function Controls({
   dataIndicator,
@@ -23,17 +27,30 @@ function Controls({
   }, [isPlayed]);
   return (
     <div className="controls">
-      <button className="btn-world" onClick={handleBtnClick} disabled={dataIndicator === 'world'}>
-        World
-      </button>
-      <button
-        className="btn-croatia"
-        onClick={handleBtnClick}
-        disabled={dataIndicator === 'croatia'}
-      >
-        Croatia
-      </button>
-      <br />
+      <div className="btns">
+        <button
+          className="btn-world"
+          id="btn"
+          onClick={handleBtnClick}
+          disabled={dataIndicator === 'world'}
+        >
+          <div style={dataIndicator === 'world' ? { maringLeft: '0' } : { maringLeft: '-100%' }}>
+            <img src={world_img} />
+          </div>
+          <span>World</span>
+        </button>
+        <button
+          className="btn-croatia"
+          id="btn"
+          onClick={handleBtnClick}
+          disabled={dataIndicator === 'croatia'}
+        >
+          <div>
+            <img src={croatia_img} alt="" />
+          </div>
+          <span>Croatia</span>
+        </button>
+      </div>
       <div className="year-range-container">
         <svg className="play-btn" viewBox="0 0 100 100" width="18" height="18" onClick={play}>
           <polygon id="play1" points="">
@@ -57,12 +74,12 @@ function Controls({
             ></animate>
           </polygon>
         </svg>
-        <input
-          type="range"
+        <Slider
           id="year"
           min={dataIndicator === 'world' ? yearsRange.world.min : yearsRange.croatia.min}
           max={dataIndicator === 'world' ? yearsRange.world.max : yearsRange.croatia.max}
           value={year}
+          defaultValue={dataIndicator === 'world' ? yearsRange.world.min : yearsRange.croatia.min}
           onChange={handleYearChange}
           step="1"
         />

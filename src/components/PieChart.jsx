@@ -26,11 +26,10 @@ function PieChart() {
   useEffect(() => {
     const svg = select(svgRef.current);
     const div = select(divRef.current);
-    let width = 450,
-      height = 450,
+    let width = 750,
+      height = 500,
       margin = 40;
 
-    // The radius of the pieplot is half the width or half the height (smallest one). I subtract a bit of margin.
     let radius = Math.min(width, height) / 2 - margin;
     let data = age_data.filter((date) => date.datum === property)[0].data;
     console.log(data);
@@ -88,18 +87,12 @@ function PieChart() {
       .style('text-anchor', 'middle')
       .style('font-size', 17);
 
-    //ADD LEGEND sa postocima
-    /*
     svg
-      .selectAll('.legend')
-      .attr('transform', 'translate(' + width / 2 + ',' + height / 2 + ')')
-      .selectAll('rect')
-      .data(color.domain())
-      .join('rect')
-      .attr('width', 12)
-      .attr('height', 12)
-      .style('fill', color);
-      */
+      .select('.title')
+      .attr('text-anchor', 'middle')
+      .attr('transform', `translate(${width / 2}, 35)`)
+      .attr('font-size', '1.5em')
+      .text('Number of tourists by age.');
   }, [property]);
 
   const handleOptionChange = (e) => {
@@ -109,27 +102,30 @@ function PieChart() {
   return (
     <div ref={divRef}>
       <svg ref={svgRef} height="500" width="750">
-        <g className="pie-chart-wrapper"></g>
-        <g className="legend"></g>
+        <text className="title" />
+        <g className="pie-chart-wrapper" />
       </svg>
-      <div className="toolTip"></div>
-      <select
-        value={property}
-        name="months-options"
-        id="months-select"
-        onChange={handleOptionChange}
-      >
-        {options.map((option) => (
-          <option
-            key={option.property}
-            value={option.property}
-            id={option.property}
-            defaultValue={property}
-          >
-            {option.value}
-          </option>
-        ))}
-      </select>
+      <div className="toolTip" />
+      <div className="select-wrapper">
+        <select
+          value={property}
+          name="months-options"
+          id="months-select"
+          onChange={handleOptionChange}
+        >
+          {options.map((option) => (
+            <option
+              key={option.property}
+              value={option.property}
+              id={option.property}
+              defaultValue={property}
+            >
+              {option.value}
+            </option>
+          ))}
+        </select>
+        <span>></span>
+      </div>
     </div>
   );
 }

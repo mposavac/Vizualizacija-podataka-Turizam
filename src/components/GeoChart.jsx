@@ -16,7 +16,7 @@ function GeoChart({ geoData, data, property, dataIndicator, countrySelected, cha
     const div = select(refWrapper.current);
     const minProp = min(data, (feature) => (feature[property] !== '' ? feature[property] : null));
     const maxProp = max(data, (feature) => feature[property]);
-    const colorScale = scaleLinear().domain([minProp, maxProp]).range(['lightgray', 'green']);
+    const colorScale = scaleLinear().domain([minProp, maxProp]).range(['#F2FEEC', '#43B929']);
 
     const { width, height } = dimensions || refWrapper.current.getBoundingClientRect();
     const projection = geoMercator()
@@ -27,8 +27,15 @@ function GeoChart({ geoData, data, property, dataIndicator, countrySelected, cha
 
     const mouseClick = function (feature) {
       changeCountry(countrySelected === feature ? null : feature);
-      //PROMJENITI BOJU OZNACENOG ELEMENTA
     };
+
+    if (countrySelected && dataIndicator === 'world') {
+      const code = countrySelected.properties.adm0_a3.toLowerCase();
+      svg
+        .select('.image_background')
+        .attr('xlink:href', `https://restcountries.eu/data/${code}.svg`);
+    }
+
     svg
       .selectAll('.country')
       .data(geoData.features)
@@ -45,18 +52,36 @@ function GeoChart({ geoData, data, property, dataIndicator, countrySelected, cha
       .on('click', mouseClick)
       .attr('class', 'country')
       .transition()
-      .attr('fill', (feature) =>
-        colorScale(
-          feature.properties.tourism.length > 0 ? feature.properties.tourism[0][property] : 0,
-        ),
-      )
+      .attr('fill', (feature) => {
+        if (countrySelected) {
+          if (dataIndicator === 'world' && feature === countrySelected)
+            return 'url(#country_background)';
+          else if (dataIndicator === 'croatia' && feature === countrySelected) return '#ef3e36';
+          else return '#EFEFEF';
+        } else {
+          return colorScale(
+            feature.properties.tourism.length > 0 ? feature.properties.tourism[0][property] : 0,
+          );
+        }
+      })
       .attr('d', (feature) => pathGenerator(feature));
   }, [geoData, data, property, dimensions, countrySelected]);
 
   return (
     <React.Fragment>
       <div className="svg-wrapper" ref={refWrapper}>
-        <svg ref={svgRef} />
+        <svg ref={svgRef}>
+          <defs>
+            <pattern
+              id="country_background"
+              patternUnits="userSpaceOnUse"
+              width="100%"
+              height="100vh"
+            >
+              <image className="image_background" x="0" y="00" width="100%" height="100vh" />
+            </pattern>
+          </defs>
+        </svg>
         <div className="toolTip" />
       </div>
     </React.Fragment>

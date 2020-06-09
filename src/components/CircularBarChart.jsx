@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { scaleBand, arc, select, scaleLinear, event } from 'd3';
+import { scaleBand, arc, select, scaleLinear, event, scaleOrdinal, schemeSet2 } from 'd3';
 import country_data from '../data/bycountry.croatia.json';
 import { orderBy } from 'lodash';
 
@@ -29,21 +29,23 @@ function CircularBarChart() {
     const div = select(divRef.current);
     let sorted = orderBy(country_data, [property], ['desc']).slice(0, 15);
     let alphabetical = orderBy(sorted, ['Zemlje'], ['asc']);
-    console.log(alphabetical);
-    let margin = { top: 100, right: 0, bottom: 0, left: 0 },
-      width = 460 - margin.left - margin.right,
-      height = 460 - margin.top - margin.bottom;
+
+    let margin = { top: 100, right: 0, bottom: 100, left: 0 },
+      width = 750 - margin.left - margin.right,
+      height = 600 - margin.top - margin.bottom;
     let innerRadius = 90,
-      outerRadius = Math.min(460, 360) / 2;
+      outerRadius = Math.min(600, 450) / 2;
     let x = scaleBand()
       .range([0, 2 * Math.PI])
       .align(0)
       .domain(alphabetical.map((d) => d.Zemlje));
+    let color = scaleOrdinal().domain([0, 15]).range(schemeSet2);
     const getMaximum = () => {
       if (property === '2019-06' || property === '2019-07' || property === '2019-08') return 800000;
       return 400000;
     };
     let y = scaleLinear().range([innerRadius, outerRadius]).domain([0, getMaximum()]);
+
     svg
       .select('.bars')
       .attr(
@@ -64,7 +66,6 @@ function CircularBarChart() {
       .on('mouseout', (d) => div.selectAll('.toolTip').style('display', 'none'))
       .transition()
       .duration(1000)
-      .attr('fill', '#69b3a2')
       .attr(
         'd',
         arc()
@@ -74,7 +75,8 @@ function CircularBarChart() {
           .endAngle((d) => x(d.Zemlje) + x.bandwidth())
           .padAngle(0.01)
           .padRadius(innerRadius),
-      );
+      )
+      .attr('fill', (d, i) => color(i));
 
     svg.select('.text').selectAll('text').remove();
     svg
@@ -149,14 +151,18 @@ function CircularBarChart() {
               .append('text')
               .attr('y', (d) => -y(d))
               .attr('dy', '-.5em')
-              //.attr('stroke', '#fff')
-              //.attr('stroke-width', 2)
               .text(y.tickFormat(3, 's'))
               .clone(true)
               .attr('fill', '#000')
               .attr('stroke', 'none'),
           ),
       );
+    svg
+      .select('.title')
+      .attr('text-anchor', 'middle')
+      .attr('transform', `translate(${width / 2}, 35)`)
+      .attr('font-size', '1.5em')
+      .text('Number of tourists by country.');
   }, [property]);
 
   const handleOptionChange = (e) => {
@@ -165,29 +171,33 @@ function CircularBarChart() {
 
   return (
     <div ref={divRef}>
-      <svg ref={svgRef} height="500" width="750">
-        <g className="bars"></g>
-        <g className="axis"></g>
-        <g className="text"></g>
+      <svg ref={svgRef} height="600" width="750">
+        <text className="title" />
+        <g className="bars" />
+        <g className="axis" />
+        <g className="text" />
       </svg>
       <div className="toolTip" />
-      <select
-        value={property}
-        name="months-options"
-        id="months-select"
-        onChange={handleOptionChange}
-      >
-        {options.map((option) => (
-          <option
-            key={option.property}
-            value={option.property}
-            id={option.property}
-            defaultValue={property}
-          >
-            {option.value}
-          </option>
-        ))}
-      </select>
+      <div className="select-wrapper">
+        <select
+          value={property}
+          name="months-options"
+          id="months-select"
+          onChange={handleOptionChange}
+        >
+          {options.map((option) => (
+            <option
+              key={option.property}
+              value={option.property}
+              id={option.property}
+              defaultValue={property}
+            >
+              {option.value}
+            </option>
+          ))}
+        </select>
+        <span>></span>
+      </div>
     </div>
   );
 }

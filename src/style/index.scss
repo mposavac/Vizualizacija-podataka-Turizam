@@ -1,9 +1,19 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap');
 
+$select_color: #e63946;
+$light_green: #6bf178;
+$white: #f1faee;
+$country: #ef3e36;
+$indigo: #083d77;
+$green: #53dd6c;
+body {
+  overflow: hidden;
+}
 .home {
   margin-top: 1em;
-  height: 90vh;
+  height: 85vh;
   font-family: 'Poppins', sans-serif;
+
   .svg-wrapper {
     height: 100%;
     transition: height 0.15s;
@@ -13,18 +23,18 @@
       width: 100%;
       height: 100%;
       .country {
-        stroke: rgba(gray, 0.75);
+        stroke: rgba(gray, 0.5);
         stroke-width: 1px;
         transition: fill 0.3s;
         &:hover {
           stroke: rgba(black, 0.75);
           stroke-width: 1px;
-          fill: rgba(red, 0.5);
+          fill: $country;
           cursor: pointer;
         }
       }
       .label-background {
-        fill: white;
+        fill: $white;
         //transition: fill-opacity 0.3s ease-in-out;
       }
     }
@@ -34,10 +44,15 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      padding-bottom: 5em;
-    }
-    input#year {
+      padding-bottom: 1em;
       width: 75%;
+      margin: auto;
+    }
+    .rc-slider-track {
+      background-color: $indigo;
+    }
+    .rc-slider-handle {
+      border: solid 2px $select_color;
     }
     .year-label {
       font-size: 1.5em;
@@ -45,12 +60,14 @@
     }
     .play-btn {
       margin-right: 2em;
+      fill: $indigo;
+      cursor: pointer;
     }
   }
 
   .chart-wrapper {
     position: absolute;
-    background: rgba(white, 0.7);
+    background: rgba($white, 0.9);
     top: 0;
     left: 0;
     height: 100%;
@@ -58,10 +75,11 @@
     opacity: 0;
     animation: fadeIn 0.5s ease-in-out forwards;
     animation-delay: 1.5s;
+    overflow: hidden;
     .line-chart-line {
-      fill: antiquewhite;
-      fill-opacity: 0.7;
-      stroke: antiquewhite;
+      fill: $green;
+      fill-opacity: 0.85;
+      stroke: $green;
     }
     #exit-btn {
       position: absolute;
@@ -70,28 +88,42 @@
       cursor: pointer;
       font-size: 1.5em;
     }
+    svg {
+      margin-top: 5em;
+    }
+    .btn-months {
+      position: absolute;
+      top: 48%;
+      right: 8px;
+    }
   }
 
   .croatia-extra-charts {
     transition: 0.3s;
     position: absolute;
-    background: rosybrown;
+    background: $white;
     top: 0;
     right: 0;
     height: 100vh;
     .croatia-btns {
       position: absolute;
       right: 10px;
-      top: 50%;
+      top: 45%;
       display: flex;
       flex-direction: column;
       .btn {
         display: inline-flex;
         overflow: hidden;
+        outline: none;
         transition: 0.3s;
         align-items: center;
+        cursor: pointer;
+        border: none;
+        border-radius: 5px;
+        margin: 0.5em 0;
         i,
-        span {
+        span,
+        img {
           width: 100%;
           display: block;
           padding: 0.5rem;
@@ -101,13 +133,14 @@
           transition: margin 0.3s;
           pointer-events: none;
         }
-        i {
+        i,
+        img {
           margin-left: -100%;
           font-size: 1.5em;
         }
         &:hover {
-          color: white;
-          background-color: black;
+          color: $white;
+          background-color: $select_color;
           i {
             margin-left: 0;
           }
@@ -120,6 +153,96 @@
       right: 1em;
       cursor: pointer;
       font-size: 1.5em;
+    }
+  }
+  .btns {
+    height: 2.5em;
+    #btn {
+      display: inline-flex;
+      overflow: hidden;
+      outline: none;
+      transition: 0.3s;
+      align-items: center;
+      cursor: pointer;
+      border: none;
+      border-radius: 5px;
+      height: 100%;
+      margin: 0em 0.5em;
+      span,
+      div {
+        width: 100%;
+        display: block;
+        padding: 0.5rem;
+        margin: 0;
+        box-sizing: border-box;
+        flex-shrink: 0;
+        transition: margin 0.3s;
+        pointer-events: none;
+        height: 2.5em;
+      }
+      div img {
+        height: 24px;
+        width: 24px;
+        transform: translate(0, -4px);
+        opacity: 0.5;
+      }
+      &:not([disabled]) div {
+        margin-left: -100%;
+        img {
+          filter: brightness(0) invert(1);
+          opacity: 1;
+        }
+      }
+      &:not([disabled]):hover {
+        color: $white;
+        background-color: $select_color;
+        div {
+          margin-left: 0;
+        }
+      }
+    }
+  }
+
+  .select-wrapper {
+    width: 200px;
+    height: 50px;
+    position: relative;
+    margin: auto;
+    span {
+      position: absolute;
+      font-size: 2em;
+      color: $white;
+      right: 10px;
+      transform: rotate(-90deg);
+      transition: 0.3s ease-in-out;
+    }
+    select {
+      width: 100%;
+      height: 100%;
+      font-size: 90%;
+      font-weight: bold;
+      cursor: pointer;
+      border-radius: 0;
+      background-color: $select_color;
+      border: none;
+      border-radius: 8px;
+      border-bottom: 2px solid rgba($select_color, 0.7);
+      color: $white;
+      padding: 10px;
+      padding-right: 38px;
+      appearance: none;
+      transition: color 0.3s ease, background-color 0.3s ease, border-bottom-color 0.3s ease;
+      &:hover,
+      &:focus {
+        color: $select_color;
+        background-color: $white;
+        border-bottom-color: #dcdcdc;
+      }
+      &:hover ~ span,
+      &:focus ~ span {
+        transform: rotate(90deg);
+        color: $select_color;
+      }
     }
   }
 }
@@ -135,13 +258,14 @@
   }
 }
 #root {
-  height: 100vh;
+  height: 97vh;
   text-align: center;
   box-sizing: border-box;
+  overflow: hidden;
 }
 
 body {
-  background: gray;
+  background: rgba($white, 0.45);
 }
 
 .toolTip {
@@ -150,7 +274,7 @@ body {
   display: none;
   width: auto;
   height: auto;
-  background: none repeat scroll 0 0 white;
+  background: none repeat scroll 0 0 $white;
   border: 0 none;
   border-radius: 8px 8px 8px 8px;
   box-shadow: -3px 3px 15px #888888;

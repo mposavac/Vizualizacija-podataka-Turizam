@@ -29,6 +29,7 @@ function App({ countrySelected }) {
   };
   const [year, setYear] = useState(yearsRange.world.min);
   useEffect(() => {
+    console.log(dataIndicator);
     if (geoData === world) {
       geoData.features.forEach((feature) => {
         const tourism_data = world_data.filter(
@@ -69,6 +70,7 @@ function App({ countrySelected }) {
   }, [isPlayed, year, setYear]);
 
   const handleBtnClick = (e) => {
+    console.log(e.target.getAttribute('class'));
     setDataReady(false);
     setIsPlayed(false);
     if (e.target.getAttribute('class') === 'btn-world') {
@@ -86,7 +88,7 @@ function App({ countrySelected }) {
 
   const handleYearChange = (e) => {
     setIsPlayed(false);
-    setYear(parseInt(e.target.value));
+    setYear(parseInt(e));
   };
 
   const play = async () => {

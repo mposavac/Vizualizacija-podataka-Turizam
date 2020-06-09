@@ -8,37 +8,47 @@ function BarChart() {
   useEffect(() => {
     const svg = select(svgRef.current);
     const div = select(divRef.current);
-    //const title = data.properties.name;
-    //const xAxisLabel = 'Date';
-    //const yAxisLabel = 'Noumber of tourists';
+    const title = 'Tourist by gender in Croatia';
+    const xAxisLabel = 'Date';
+    const yAxisLabel = 'Noumber of tourists';
 
-    // let margin = { top: 10, right: 30, bottom: 20, left: 50 };
-    //let height = 400 - margin.top - margin.bottom;
+    let margin = { top: 100, right: 50, bottom: 75, left: 100 };
+    let height = 600,
+      width = 750;
 
     let groups = Object.values(gender_data).map((date) => date['datum']);
     let subgroups = ['Žene', 'Muškarci'];
 
-    let x = scaleBand().domain(groups).range([0, 450]).padding([0.2]);
-    let y = scaleLinear().domain([0, 2000000]).range([450, 0]);
+    let x = scaleBand()
+      .domain(groups)
+      .range([margin.left, width - margin.left - margin.right])
+      .padding([0.2]);
+    let y = scaleLinear()
+      .domain([0, 2500000])
+      .range([height - margin.top, margin.top]);
 
     svg
       .append('g')
-      .attr('transform', `translate(75, ${450})`)
+      .attr('transform', `translate(0,${height - margin.bottom})`)
       .call(axisBottom(x).tickSize(0))
       .selectAll('text')
       .style('text-anchor', 'start')
       .attr('dx', '.8em')
       .attr('dy', '.12em')
       .attr('transform', 'rotate(65)');
-    svg.append('g').attr('transform', 'translate(75, 0)').call(axisLeft(y));
-
-    let xSubGroup = scaleBand().domain(subgroups).range([0, x.bandwidth()]).padding([0.05]);
-
-    let color = scaleOrdinal().domain(subgroups).range(['#e41a1c', '#377eb8']);
 
     svg
       .append('g')
-      .attr('transform', 'translate(75,0)')
+      .attr('transform', `translate(${margin.left}, ${margin.top - margin.bottom})`)
+      .call(axisLeft(y).ticks(8, 's'));
+
+    let xSubGroup = scaleBand().domain(subgroups).range([0, x.bandwidth()]).padding([0.1]);
+
+    let color = scaleOrdinal().domain(subgroups).range(['#ef3e36', '#377eb8']);
+
+    svg
+      .append('g')
+      .attr('transform', `translate(0, ${margin.top - margin.bottom})`)
       .selectAll('g')
       .data(gender_data)
       .enter()
@@ -62,13 +72,40 @@ function BarChart() {
       .attr('x', (d) => xSubGroup(d.key))
       .attr('y', (d) => y(d.value))
       .attr('width', (d) => xSubGroup.bandwidth())
-      .attr('height', (d) => 450 - y(d.value))
+      .attr('height', (d) => height - margin.top - y(d.value))
       .attr('fill', (d) => color(d.key));
+
+    svg
+      .select('.title')
+      .attr('text-anchor', 'middle')
+      .attr('transform', `translate(${width / 2}, 35)`)
+      .attr('font-size', '1.5em')
+      .text(title);
+
+    svg
+      .select('.xaxis-label')
+      .attr('transform', `translate(${width / 2}, ${height - 10})`)
+      .style('text-anchor', 'middle')
+      .text(xAxisLabel);
+
+    svg
+      .select('.yaxis-label')
+      .attr('transform', 'rotate(-90)')
+      .attr('y', '25')
+      .attr('x', 0 - height / 2)
+      .attr('dy', '1em')
+      .style('text-anchor', 'middle')
+      .text('Value')
+      .text(yAxisLabel);
   }, []);
 
   return (
     <div ref={divRef}>
-      <svg ref={svgRef} height="500" width="750" />
+      <svg ref={svgRef} height="600" width="750">
+        <text className="title" />
+        <text className="xaxis-label" />
+        <text className="yaxis-label" />
+      </svg>
       <div className="toolTip" />
     </div>
   );

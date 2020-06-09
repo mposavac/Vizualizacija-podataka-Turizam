@@ -16,14 +16,14 @@ function AreaChart({ data, dataIndicator, isByMonths, toggleMonths, changeCountr
   const svgRef = useRef();
   const divRef = useRef();
   const [yearOrMonthsData, setYearOrMonthsData] = useState(data.properties.tourism[0]);
-  const height = 500,
+  const height = 600,
     width = 750,
-    margin = { left: 100, top: 50, right: 100, bottom: 50 };
+    margin = { top: 100, left: 100, right: 100, bottom: 50 };
 
   useEffect(() => {
     if (dataIndicator === 'world') setYearOrMonthsData(data.properties.tourism[0]);
     const title = data.properties.name;
-    const xAxisLabel = 'Year';
+    const xAxisLabel = isByMonths ? 'Month' : 'Year';
     const yAxisLabel = 'Number of tourists';
     let keys = Object.keys(yearOrMonthsData).filter(
       (year) =>
@@ -50,7 +50,7 @@ function AreaChart({ data, dataIndicator, isByMonths, toggleMonths, changeCountr
     if (dataIndicator === 'croatia' && isByMonths)
       xScale = scaleBand()
         .domain(keys)
-        .range([margin.left, width - margin.left - margin.right]);
+        .range([margin.left, width - margin.left]);
     else
       xScale = scaleLinear()
         .domain(dataIndicator === 'world' ? [1995, 2018] : [2016, 2019])
@@ -58,7 +58,7 @@ function AreaChart({ data, dataIndicator, isByMonths, toggleMonths, changeCountr
 
     const yScale = scaleLinear()
       .domain([0, max])
-      .range([height - margin.top, margin.bottom]);
+      .range([height - margin.top, margin.top]);
 
     const scaleXData = (point) => xScale(point.year);
     const scaleYData = (point) => yScale(point.numberOfTourists);
@@ -71,12 +71,12 @@ function AreaChart({ data, dataIndicator, isByMonths, toggleMonths, changeCountr
 
     svg
       .select('.line-chart-xaxis')
-      .attr('transform', `translate(0, ${height - margin.bottom})`)
+      .attr('transform', `translate(0, ${height - margin.top})`)
       .call(xAxis);
 
     svg
       .select('.xaxis-label')
-      .attr('transform', `translate(${width / 2}, ${height - 10})`)
+      .attr('transform', `translate(${width / 2}, ${height - 40})`)
       .style('text-anchor', 'middle')
       .text(xAxisLabel);
 
@@ -97,18 +97,21 @@ function AreaChart({ data, dataIndicator, isByMonths, toggleMonths, changeCountr
       .attr('x', 0 - height / 2)
       .attr('dy', '1em')
       .style('text-anchor', 'middle')
-      .text('Value')
       .text(yAxisLabel);
 
-    svg.append('path').attr('class', 'line-chart-line').attr('transform', `translate(2,-2)`);
+    svg.append('path').attr('class', 'line-chart-line').attr('transform', `translate(2, -1)`);
 
-    const curve = area().x(scaleXData).y0(450).y1(scaleYData).curve(curveBasis);
+    const curve = area()
+      .x(scaleXData)
+      .y0(height - margin.top)
+      .y1(scaleYData)
+      .curve(curveBasis);
 
     svg.select('.line-chart-line').transition().duration(250).attr('d', curve(new_data));
     svg
       .select('.title')
       .attr('text-anchor', 'middle')
-      .attr('transform', `translate(${width / 2}, 45)`)
+      .attr('transform', `translate(${width / 2}, 35)`)
       .attr('font-size', `${dataIndicator === 'croatia' ? '1.5em' : '2em'}`)
       .text(`Arrivals in ${title} ${dataIndicator === 'croatia' ? 'županija' : ''}`);
   }, [data, yearOrMonthsData]);
@@ -129,7 +132,7 @@ function AreaChart({ data, dataIndicator, isByMonths, toggleMonths, changeCountr
       <div onClick={handleDataChange} id="exit-btn">
         x
       </div>
-      <svg ref={svgRef} height="500" width="750">
+      <svg ref={svgRef} height="600" width="750">
         <text className="title" />
         <g className="line-chart-xaxis"></g>
         <text className="xaxis-label" />
@@ -138,8 +141,8 @@ function AreaChart({ data, dataIndicator, isByMonths, toggleMonths, changeCountr
       </svg>
       <div className="toolTip" />
       {dataIndicator === 'croatia' && (
-        <button onClick={handleDataChange}>
-          Show tourists by {isByMonths ? 'years' : 'months'}
+        <button className="btn-months" onClick={handleDataChange}>
+          Details by {isByMonths ? 'years' : 'months'}
         </button>
       )}
     </div>
