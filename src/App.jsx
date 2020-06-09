@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import GeoChart from './components/GeoChart';
 import AreaChart from './components/AreaChart';
-import PieChart from './components/PieChart';
+import CroatiaChartsController from './components/CroatiaChartsController';
 import Controls from './components/Controls';
 import world from './data/GeoChart.world.geo.json';
 import croatia from './data/GeoChart.croatia.geo.json';
@@ -115,6 +115,7 @@ function App({ countrySelected }) {
         play={play}
         isPlayed={isPlayed}
       />
+      {dataIndicator === 'croatia' && <CroatiaChartsController countrySelected={countrySelected} />}
     </div>
   );
 }

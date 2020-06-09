@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { pie, arc, select, scaleLinear, event, scaleOrdinal, schemePastel1, entries } from 'd3';
+import { pie, arc, select, event, scaleOrdinal, schemePastel1, entries } from 'd3';
 import age_data from '../data/age.croatia.json';
-import { orderBy } from 'lodash';
 
 function PieChart() {
   const options = [

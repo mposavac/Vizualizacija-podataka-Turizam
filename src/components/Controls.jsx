@@ -23,10 +23,14 @@ function Controls({
   }, [isPlayed]);
   return (
     <div className="controls">
-      <button className="btn-world" onClick={handleBtnClick}>
+      <button className="btn-world" onClick={handleBtnClick} disabled={dataIndicator === 'world'}>
         World
       </button>
-      <button className="btn-croatia" onClick={handleBtnClick}>
+      <button
+        className="btn-croatia"
+        onClick={handleBtnClick}
+        disabled={dataIndicator === 'croatia'}
+      >
         Croatia
       </button>
       <br />
