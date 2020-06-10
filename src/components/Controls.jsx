@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { connect } from 'react-redux';
 import TextTransition, { presets } from 'react-text-transition';
 import Slider from 'rc-slider';
 import world_img from '../assets/world.png';
@@ -13,6 +14,7 @@ function Controls({
   handleYearChange,
   isPlayed,
   play,
+  countrySelected,
 }) {
   const playPoints = {
     play: ['0 100, 0 0, 50 25, 50 75', '49 25, 100 50, 100 50, 49 75'],
@@ -26,7 +28,14 @@ function Controls({
       .forEach((element) => element.beginElement());
   }, [isPlayed]);
   return (
-    <div className="controls">
+    <div
+      className="controls"
+      style={
+        countrySelected
+          ? { opacity: '0', pointerEvents: 'none' }
+          : { opacity: '1', pointerEvents: 'auto' }
+      }
+    >
       <div className="btns">
         <button
           className="btn-world"
@@ -35,7 +44,7 @@ function Controls({
           disabled={dataIndicator === 'world'}
         >
           <div style={dataIndicator === 'world' ? { maringLeft: '0' } : { maringLeft: '-100%' }}>
-            <img src={world_img} />
+            <img src={world_img} alt="World_img" />
           </div>
           <span>World</span>
         </button>
@@ -46,7 +55,7 @@ function Controls({
           disabled={dataIndicator === 'croatia'}
         >
           <div>
-            <img src={croatia_img} alt="" />
+            <img src={croatia_img} alt="Croatia_icon" />
           </div>
           <span>Croatia</span>
         </button>
@@ -89,4 +98,8 @@ function Controls({
   );
 }
 
-export default Controls;
+const mapStateToProps = (state) => ({
+  countrySelected: state.countrySelected,
+});
+
+export default connect(mapStateToProps)(Controls);

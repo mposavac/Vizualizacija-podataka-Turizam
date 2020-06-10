@@ -40,6 +40,7 @@ body {
     }
   }
   .controls {
+    transition: 0.5s;
     .year-range-container {
       display: flex;
       justify-content: center;
@@ -76,6 +77,7 @@ body {
     animation: fadeIn 0.5s ease-in-out forwards;
     animation-delay: 1.5s;
     overflow: hidden;
+    z-index: 1000;
     .line-chart-line {
       fill: $green;
       fill-opacity: 0.85;
@@ -87,14 +89,30 @@ body {
       right: 1em;
       cursor: pointer;
       font-size: 1.5em;
+      font-weight: 500;
+      transition: 0.3s;
+      &:hover {
+        color: $select_color;
+      }
     }
     svg {
       margin-top: 5em;
     }
     .btn-months {
       position: absolute;
-      top: 48%;
-      right: 8px;
+      top: 2.4em;
+      right: 60px;
+      padding: 0.5em;
+      outline: none;
+      transition: 0.3s;
+      align-items: center;
+      cursor: pointer;
+      border: 1px solid rgba($select_color, 0.2);
+      border-radius: 5px;
+      &:hover {
+        background: $select_color;
+        color: $white;
+      }
     }
   }
 
@@ -185,6 +203,7 @@ body {
         width: 24px;
         transform: translate(0, -4px);
         opacity: 0.5;
+        transition: 0.3s;
       }
       &:not([disabled]) div {
         margin-left: -100%;

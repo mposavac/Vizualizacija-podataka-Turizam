@@ -28,33 +28,28 @@ function App({ countrySelected }) {
     },
   };
   const [year, setYear] = useState(yearsRange.world.min);
-  useEffect(() => {
-    console.log(dataIndicator);
-    if (geoData === world) {
-      geoData.features.forEach((feature) => {
-        const tourism_data = world_data.filter(
-          (country) => country['Country Code'] === feature.properties['adm0_a3'],
-        );
-        feature.properties.tourism = tourism_data;
-      });
-      setDataReady(true);
-    } else {
-      geoData.features.forEach((feature) => {
-        const tourism_data = croatia_data.filter(
-          (country) =>
-            country['Županije'].toLowerCase() === feature.properties['name'].toLowerCase(),
-        );
 
-        const bymonths_data = croatia_bymonths_data.filter(
-          (country) =>
-            country['Prostorna jedinica'].toLowerCase() ===
-            feature.properties['name'].toLowerCase(),
-        );
-        feature.properties.tourism = [...tourism_data, ...bymonths_data];
-      });
-      setDataReady(true);
-    }
-  }, [data, geoData]);
+  useEffect(() => {
+    world.features.forEach((feature) => {
+      const tourism_data = world_data.filter(
+        (country) => country['Country Code'] === feature.properties['adm0_a3'],
+      );
+      feature.properties.tourism = tourism_data;
+    });
+
+    croatia.features.forEach((feature) => {
+      const tourism_data = croatia_data.filter(
+        (country) => country['Županije'].toLowerCase() === feature.properties['name'].toLowerCase(),
+      );
+
+      const bymonths_data = croatia_bymonths_data.filter(
+        (country) =>
+          country['Prostorna jedinica'].toLowerCase() === feature.properties['name'].toLowerCase(),
+      );
+      feature.properties.tourism = [...tourism_data, ...bymonths_data];
+    });
+    setDataReady(true);
+  }, []);
 
   useEffect(() => {
     if (year < yearsRange[dataIndicator].max && isPlayed) {
@@ -70,7 +65,6 @@ function App({ countrySelected }) {
   }, [isPlayed, year, setYear]);
 
   const handleBtnClick = (e) => {
-    console.log(e.target.getAttribute('class'));
     setDataReady(false);
     setIsPlayed(false);
     if (e.target.getAttribute('class') === 'btn-world') {
@@ -78,11 +72,17 @@ function App({ countrySelected }) {
       setData(world_data);
       setDataIndicator('world');
       setYear(yearsRange.world.min);
+      setTimeout(() => {
+        setDataReady(true);
+      }, 100);
     } else {
       setGeoData(croatia);
       setData(croatia_data);
       setDataIndicator('croatia');
       setYear(yearsRange.croatia.min);
+      setTimeout(() => {
+        setDataReady(true);
+      }, 100);
     }
   };
 
@@ -101,8 +101,10 @@ function App({ countrySelected }) {
 
   return (
     <div className="home">
-      {dataReady && (
+      {dataReady ? (
         <GeoChart geoData={geoData} data={data} property={year} dataIndicator={dataIndicator} />
+      ) : (
+        <div className="svg-wrapper"></div>
       )}
       {countrySelected && (
         <AreaChart data={countrySelected} year={year} dataIndicator={dataIndicator} />

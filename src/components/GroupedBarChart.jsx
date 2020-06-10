@@ -97,6 +97,27 @@ function BarChart() {
       .style('text-anchor', 'middle')
       .text('Value')
       .text(yAxisLabel);
+    // ;
+    ['#ef3e36', '#377eb8'].forEach((element, i) => {
+      svg
+        .select('.legend')
+        .append('rect')
+        .attr('x', width - 100)
+        .attr('y', 100 + i * 20)
+        .attr('width', '10')
+        .attr('height', '10')
+        .style('fill', element);
+
+      svg
+        .select('.legend')
+        .append('text')
+        .attr('x', width - 80)
+        .attr('y', 105 + i * 20)
+        .attr('text-anchor', 'left')
+        .attr('font-size', '10x')
+        .style('alignment-baseline', 'middle')
+        .text(i ? 'Muškarci' : 'Žene');
+    });
   }, []);
 
   return (
@@ -105,6 +126,7 @@ function BarChart() {
         <text className="title" />
         <text className="xaxis-label" />
         <text className="yaxis-label" />
+        <g className="legend"></g>
       </svg>
       <div className="toolTip" />
     </div>
