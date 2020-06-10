@@ -120,6 +120,31 @@ function AreaChart({ data, dataIndicator, isByMonths, toggleMonths, changeCountr
     }
   };
 
+  const renderPeople = () => {
+    let ratio = (
+      data.properties.tourism[0][dataIndicator === 'croatia' ? 2019 : 2018] /
+      data.properties.pop_est
+    ).toFixed(2);
+    let icons = [];
+    for (let i = 0; i < Math.ceil(ratio); i++) {
+      icons.push(<i key={i} className="fas fa-street-view"></i>);
+    }
+    return (
+      <div className="tourist-on-citizen">
+        <div className="icons">
+          <div className="people-icons" style={{ width: (20 + 4) * ratio }}>
+            {icons}
+          </div>
+          <i className="fas fa-male"></i>
+        </div>
+        <div className="info">
+          <span>{ratio} tourists</span>
+          <span>{`on every citizen in ${dataIndicator === 'croatia' ? 2019 : 2018}`}</span>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <div className="chart-wrapper" ref={divRef}>
       <div
@@ -143,6 +168,8 @@ function AreaChart({ data, dataIndicator, isByMonths, toggleMonths, changeCountr
           Details by {isByMonths ? 'years' : 'months'}
         </button>
       )}
+
+      {renderPeople()}
     </div>
   );
 }
