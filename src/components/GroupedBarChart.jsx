@@ -64,7 +64,11 @@ function BarChart() {
           .style('top', event.pageY - 25 + 'px')
           .style('left', event.pageX + 10 + 'px')
           .style('display', 'inline-block')
-          .html(d.value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + '<br>' + d.key);
+          .html(
+            d.value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') +
+              '<br>' +
+              (d.key === 'Muškarci' ? 'Men' : 'Women'),
+          );
       })
       .on('mouseout', (d) => div.selectAll('.toolTip').style('display', 'none'))
       .transition()
@@ -97,7 +101,7 @@ function BarChart() {
       .style('text-anchor', 'middle')
       .text('Value')
       .text(yAxisLabel);
-    // ;
+
     ['#ef3e36', '#377eb8'].forEach((element, i) => {
       svg
         .select('.legend')
@@ -116,7 +120,7 @@ function BarChart() {
         .attr('text-anchor', 'left')
         .attr('font-size', '10x')
         .style('alignment-baseline', 'middle')
-        .text(i ? 'Muškarci' : 'Žene');
+        .text(i ? 'Men' : 'Women');
     });
   }, []);
 

@@ -117,22 +117,28 @@ body {
     }
     .tourist-on-citizen {
       display: flex;
-      position: relative;
-      bottom: 2em;
-      left: 0.5em;
+      position: absolute;
+      bottom: 1em;
+      left: 3em;
       width: 50%;
+
       .people-icons {
         display: flex;
         position: relative;
         height: 2.5em;
         overflow: hidden;
+        align-items: center;
+        margin-top: -0.5em;
+        margin-bottom: 0.75em;
       }
       i {
         font-size: 20px;
         margin-right: 4px;
+        min-width: 20px;
       }
       .info {
         display: flex;
+        justify-content: center;
         flex-direction: column;
         align-items: start;
         margin-left: 1em;
@@ -198,6 +204,9 @@ body {
       right: 1em;
       cursor: pointer;
       font-size: 1.5em;
+    }
+    svg {
+      margin-top: 2.5em;
     }
   }
   .btns {

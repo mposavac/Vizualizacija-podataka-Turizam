@@ -127,7 +127,7 @@ function AreaChart({ data, dataIndicator, isByMonths, toggleMonths, changeCountr
     ).toFixed(2);
     let icons = [];
     for (let i = 0; i < Math.ceil(ratio); i++) {
-      icons.push(<i key={i} className="fas fa-street-view"></i>);
+      icons.push(<i key={i} className="fas fa-walking" />);
     }
     return (
       <div className="tourist-on-citizen">

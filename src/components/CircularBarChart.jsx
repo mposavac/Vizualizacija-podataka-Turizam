@@ -5,21 +5,21 @@ import { orderBy } from 'lodash';
 
 function CircularBarChart() {
   const options = [
-    { property: '2019-01', value: 'Siječanj 2019.' },
-    { property: '2019-02', value: 'Veljača 2019.' },
-    { property: '2019-03', value: 'Ožujak 2019.' },
-    { property: '2019-04', value: 'Travanj 2019.' },
-    { property: '2019-05', value: 'Svibanj 2019.' },
-    { property: '2019-06', value: 'Lipanj 2019.' },
-    { property: '2019-07', value: 'Srpanj 2019.' },
-    { property: '2019-08', value: 'Kolovoz 2019.' },
-    { property: '2019-09', value: 'Rujan 2019.' },
-    { property: '2019-10', value: 'Listopad 2019.' },
-    { property: '2019-11', value: 'Studeni 2019.' },
-    { property: '2019-12', value: 'Prosinac 2019.' },
-    { property: '2020-01', value: 'Siječanj 2020.' },
-    { property: '2020-02', value: 'Veljača 2020.' },
-    { property: '2020-03', value: 'Ožujak 2020.' },
+    { property: '2019-01', value: 'January 2019.' },
+    { property: '2019-02', value: 'February 2019.' },
+    { property: '2019-03', value: 'March 2019.' },
+    { property: '2019-04', value: 'April 2019.' },
+    { property: '2019-05', value: 'May 2019.' },
+    { property: '2019-06', value: 'June 2019.' },
+    { property: '2019-07', value: 'July 2019.' },
+    { property: '2019-08', value: 'August 2019.' },
+    { property: '2019-09', value: 'September 2019.' },
+    { property: '2019-10', value: 'October 2019.' },
+    { property: '2019-11', value: 'November 2019.' },
+    { property: '2019-12', value: 'December 2019.' },
+    { property: '2020-01', value: 'January 2020.' },
+    { property: '2020-02', value: 'February 2020.' },
+    { property: '2020-03', value: 'March 2020.' },
   ];
   const [property, setProperty] = useState('2019-07');
   const svgRef = useRef();
