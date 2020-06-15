@@ -29,7 +29,9 @@ function App({ countrySelected }) {
   };
   const [year, setYear] = useState(yearsRange.world.min);
 
+  //Ova se funkcija poziva prilikom ucitavanja stranice
   useEffect(() => {
+    //Ubacivanje turistickih podataka svake zemlje unutar geoJSON podataka
     world.features.forEach((feature) => {
       const tourism_data = world_data.filter(
         (country) => country['Country Code'] === feature.properties['adm0_a3'],
@@ -37,6 +39,7 @@ function App({ countrySelected }) {
       feature.properties.tourism = tourism_data;
     });
 
+    //Ubacivanje turistickih podataka i podataka po mjesecima svake županije unutar geoJSON podataka
     croatia.features.forEach((feature) => {
       const tourism_data = croatia_data.filter(
         (country) => country['Županije'].toLowerCase() === feature.properties['name'].toLowerCase(),
@@ -51,6 +54,8 @@ function App({ countrySelected }) {
     setDataReady(true);
   }, []);
 
+  // Ova se funkcija poziva prilikom svake promjene godine i služi za
+  // automatsku promjenu godine nakon 1 sekunde ako korisnik klikne na play button
   useEffect(() => {
     if (year < yearsRange[dataIndicator].max && isPlayed) {
       let timeout = setTimeout(() => {
@@ -64,6 +69,7 @@ function App({ countrySelected }) {
     //eslint-disable-next-line
   }, [isPlayed, year, setYear]);
 
+  //Funkciju za promjenu podataka na svijet ili hrvatsku
   const handleBtnClick = (e) => {
     setDataReady(false);
     setIsPlayed(false);
@@ -86,11 +92,13 @@ function App({ countrySelected }) {
     }
   };
 
+  //Funkcija za promjenu godine
   const handleYearChange = (e) => {
     setIsPlayed(false);
     setYear(parseInt(e));
   };
 
+  //Funkcija za pokretanje automatske promjene godine
   const play = async () => {
     if (dataIndicator === 'world' && year === yearsRange.world.max) setYear(yearsRange.world.min);
     if (dataIndicator === 'croatia' && year === yearsRange.croatia.max)
@@ -124,6 +132,7 @@ function App({ countrySelected }) {
   );
 }
 
+//Redux funkcije za čitanje iz spremnika
 const mapStateToProps = (state) => ({
   countrySelected: state.countrySelected,
 });

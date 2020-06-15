@@ -3,6 +3,7 @@ import { pie, arc, select, event, scaleOrdinal, schemePastel1, entries } from 'd
 import age_data from '../data/age.croatia.json';
 
 function PieChart() {
+  //Opcije za prikaz u dropdown izborniku
   const options = [
     { property: '2019-01', value: 'January 2019.' },
     { property: '2019-02', value: 'February 2019.' },
@@ -30,22 +31,32 @@ function PieChart() {
       height = 500,
       margin = 40;
 
+    //Radius dijagrama u ovisnosti o visini i širini
     let radius = Math.min(width, height) / 2 - margin;
+    //Izvdajanje podataka za određen mjesec
     let data = age_data.filter((date) => date.datum === property)[0].data;
-    console.log(data);
-    const sums = Object.values(data).reduce((a, b) => a + b);
 
+    //Suma broja turista
+    const sums = Object.values(data).reduce((a, b) => a + b);
+    //Kreiranje skale za boje kojoj je domena svaka dobna grupa
     let color = scaleOrdinal()
       .domain(['<14', '15-24', '25-34', '35-44', '45-54', '55-64', '>65'])
       .range(schemePastel1);
+
+    // Funkcija za kreiranje generatora prstenastog grafa koji se ne sortira
+    // kako bi se uvijek dobili podaci onako kao su i zadani
     let pie_chart = pie()
       .sort(null)
       .value((d) => d.value);
+
+    //Funkcija za kreiranje prstenastog grafa od danih podataka
     let data_ready = pie_chart(entries(data));
+    // Funkcija za crtanje kružnice sa zadanim vanjskim i unutarnjim radiusom
     let innerArc = arc()
       .innerRadius(radius * 0.5)
       .outerRadius(radius * 0.8);
 
+    //Crtanje prstenastog grafa
     svg
       .select('.pie-chart-wrapper')
       .attr('transform', 'translate(' + width / 2 + ',' + height / 2 + ')')
@@ -53,6 +64,7 @@ function PieChart() {
       .data(data_ready)
       .join('path')
       .on('mousemove', (d) => {
+        //Na pomicanje miša div elementu toolTip se postvalja text sa podacima o vrijednosti i udio u grafu
         div
           .selectAll('.toolTip')
           .style('top', event.pageY - 25 + 'px')
@@ -74,6 +86,7 @@ function PieChart() {
       .style('stroke-width', '2px')
       .style('opacity', 0.7);
 
+    //Ispisivanje vrijednosti na graf
     svg
       .select('.pie-chart-wrapper')
       .selectAll('.pie-value-age')
@@ -86,7 +99,7 @@ function PieChart() {
       .attr('transform', (d) => 'translate(' + innerArc.centroid(d) + ')')
       .style('text-anchor', 'middle')
       .style('font-size', 17);
-
+    //Naziv grafa
     svg
       .select('.title')
       .attr('text-anchor', 'middle')
@@ -95,6 +108,7 @@ function PieChart() {
       .text('Number of tourists by age.');
   }, [property]);
 
+  //Funkcija za promjenu mjeseca za prikaz podataka
   const handleOptionChange = (e) => {
     setProperty(e.target.value);
   };

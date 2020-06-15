@@ -16,17 +16,21 @@ function BarChart() {
     let height = 600,
       width = 750;
 
+    //Izvlačenje vrijednosti objekta odnosno datuma
     let groups = Object.values(gender_data).map((date) => date['datum']);
     let subgroups = ['Žene', 'Muškarci'];
 
+    //Dodjeljivanje x skale za datume
     let x = scaleBand()
       .domain(groups)
       .range([margin.left, width - margin.left - margin.right])
       .padding([0.2]);
+    //Dodjeljivanje y skale
     let y = scaleLinear()
       .domain([0, 2500000])
       .range([height - margin.top, margin.top]);
 
+    //Crtanje x-osi
     svg
       .append('g')
       .attr('transform', `translate(0,${height - margin.bottom})`)
@@ -37,15 +41,19 @@ function BarChart() {
       .attr('dy', '.12em')
       .attr('transform', 'rotate(65)');
 
+    //Crtanje y-osi
     svg
       .append('g')
       .attr('transform', `translate(${margin.left}, ${margin.top - margin.bottom})`)
       .call(axisLeft(y).ticks(8, 's'));
 
+    //Skala za stupce žene i muškarce posbeno
     let xSubGroup = scaleBand().domain(subgroups).range([0, x.bandwidth()]).padding([0.1]);
 
+    //Skala za boje
     let color = scaleOrdinal().domain(subgroups).range(['#ef3e36', '#377eb8']);
 
+    //Crtanje rect (pravokutnika) elemenata odnosno stupaca
     svg
       .append('g')
       .attr('transform', `translate(0, ${margin.top - margin.bottom})`)
@@ -59,6 +67,7 @@ function BarChart() {
       .enter()
       .append('rect')
       .on('mousemove', (d) => {
+        //Na pomicanje miša div elementu toolTip se postvalja text sa podacima o broju turista i spolu
         div
           .selectAll('.toolTip')
           .style('top', event.pageY - 25 + 'px')
@@ -73,12 +82,14 @@ function BarChart() {
       .on('mouseout', (d) => div.selectAll('.toolTip').style('display', 'none'))
       .transition()
       .duration(500)
+      //Atributi jednog stupca
       .attr('x', (d) => xSubGroup(d.key))
       .attr('y', (d) => y(d.value))
       .attr('width', (d) => xSubGroup.bandwidth())
       .attr('height', (d) => height - margin.top - y(d.value))
       .attr('fill', (d) => color(d.key));
 
+    //Ispisivanje naziva grafa
     svg
       .select('.title')
       .attr('text-anchor', 'middle')
@@ -86,12 +97,14 @@ function BarChart() {
       .attr('font-size', '1.5em')
       .text(title);
 
+    //Ispisivanje naziva x-osi
     svg
       .select('.xaxis-label')
       .attr('transform', `translate(${width / 2}, ${height - 10})`)
       .style('text-anchor', 'middle')
       .text(xAxisLabel);
 
+    //Ispisivanje naziva y-osi
     svg
       .select('.yaxis-label')
       .attr('transform', 'rotate(-90)')
@@ -102,6 +115,7 @@ function BarChart() {
       .text('Value')
       .text(yAxisLabel);
 
+    //Crtanje legende na način da se crta kvadrat i ispisuje tekst pored njega
     ['#ef3e36', '#377eb8'].forEach((element, i) => {
       svg
         .select('.legend')

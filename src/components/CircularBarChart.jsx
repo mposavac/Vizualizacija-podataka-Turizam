@@ -27,7 +27,9 @@ function CircularBarChart() {
   useEffect(() => {
     const svg = select(svgRef.current);
     const div = select(divRef.current);
+    //Sortiranje top 15 zemalja po broju dolazaka
     let sorted = orderBy(country_data, [property], ['desc']).slice(0, 15);
+    //Sortiranje zemalja abecednim redom
     let alphabetical = orderBy(sorted, ['Zemlje'], ['asc']);
 
     let margin = { top: 100, right: 0, bottom: 100, left: 0 },
@@ -35,17 +37,22 @@ function CircularBarChart() {
       height = 600 - margin.top - margin.bottom;
     let innerRadius = 90,
       outerRadius = Math.min(600, 450) / 2;
+    //Kreiranje x skale sa imenima zemalja
     let x = scaleBand()
       .range([0, 2 * Math.PI])
       .align(0)
       .domain(alphabetical.map((d) => d.Zemlje));
+    //Kreiranje skale sa bojama
     let color = scaleOrdinal().domain([0, 15]).range(schemeSet2);
+    //Funkcija za vračanja maskimalne vrijednosti domene
     const getMaximum = () => {
       if (property === '2019-06' || property === '2019-07' || property === '2019-08') return 800000;
       return 400000;
     };
+    //Kreiranje y skale sa vrijednostima
     let y = scaleLinear().range([innerRadius, outerRadius]).domain([0, getMaximum()]);
 
+    //Crtanje grafa
     svg
       .select('.bars')
       .attr(
@@ -56,6 +63,7 @@ function CircularBarChart() {
       .data(alphabetical)
       .join('path')
       .on('mousemove', (d) => {
+        //Na pomicanje miša div elementu toolTip se postvalja tekst sa podacima o broju turista
         div
           .selectAll('.toolTip')
           .style('top', event.pageY - 25 + 'px')
@@ -66,6 +74,7 @@ function CircularBarChart() {
       .on('mouseout', (d) => div.selectAll('.toolTip').style('display', 'none'))
       .transition()
       .duration(1000)
+      //Crtanje pojedinog stupca
       .attr(
         'd',
         arc()
@@ -78,7 +87,9 @@ function CircularBarChart() {
       )
       .attr('fill', (d, i) => color(i));
 
+    //Brisanje svih tekstualnih elemenata
     svg.select('.text').selectAll('text').remove();
+
     svg
       .select('.text')
       .attr(
@@ -106,11 +117,13 @@ function CircularBarChart() {
           ',0)'
         );
       });
+    //Ispisivanje vrijednosti
     svg
       .selectAll('.text-wrapper')
       .append('text')
       .data(alphabetical)
       .on('mousemove', (d) => {
+        //Na pomicanje miša div elementu toolTip se postvalja tekst sa podacima o broju turista
         div
           .selectAll('.toolTip')
           .style('top', event.pageY - 25 + 'px')
@@ -120,6 +133,7 @@ function CircularBarChart() {
       })
       .on('mouseout', (d) => div.selectAll('.toolTip').style('display', 'none'))
       .text((d) => d.Zemlje)
+      //Pomicanje položaja po grafu
       .attr('transform', function (d) {
         return (x(d.Zemlje) + x.bandwidth() / 2 + Math.PI) % (2 * Math.PI) < Math.PI
           ? 'rotate(180)'
@@ -129,7 +143,7 @@ function CircularBarChart() {
       .attr('alignment-baseline', 'middle');
 
     svg.selectAll('.axis').selectAll('g').remove();
-
+    //Crtanje osi sa vrijednostima
     svg
       .selectAll('.axis')
       .attr('text-anchor', 'middle')
@@ -144,9 +158,11 @@ function CircularBarChart() {
           .join('g')
           .attr('fill', 'none')
           .call((g) =>
+            //Crtanje vrijednosnih kružnica oko grafa
             g.append('circle').attr('stroke', '#000').attr('stroke-opacity', 0.2).attr('r', y),
           )
           .call((g) =>
+            //Ispisivanje teksta vrijednosti
             g
               .append('text')
               .attr('y', (d) => -y(d))
@@ -157,6 +173,7 @@ function CircularBarChart() {
               .attr('stroke', 'none'),
           ),
       );
+    //Ispisivanje naslova grafa
     svg
       .select('.title')
       .attr('text-anchor', 'middle')
@@ -164,7 +181,7 @@ function CircularBarChart() {
       .attr('font-size', '1.5em')
       .text('Number of tourists by country.');
   }, [property]);
-
+  //Funkcija za promjenu mjeseca prikaza
   const handleOptionChange = (e) => {
     setProperty(e.target.value);
   };

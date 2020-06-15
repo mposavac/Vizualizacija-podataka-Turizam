@@ -12,12 +12,15 @@ function GeoChart({ geoData, data, property, dataIndicator, countrySelected, cha
   const [minProp, setMinProp] = useState();
   const [maxProp, setMaxProp] = useState();
 
+  //Ova funkcija se poziva nakon svake promjene data indikatora (svijet ili hrvatska)
   useEffect(() => {
     changeCountry(null);
     //eslint-disable-next-line
   }, [dataIndicator]);
 
+  //Ova funkcija se poziva nakon svake promjene godine i podataka (svijet ili hrvatska)
   useEffect(() => {
+    //Pronalazak minimalnog i maksimalnog broja dolazaka za određenu godinu
     const min_prop = min(data, (feature) => (feature[property] !== '' ? feature[property] : null));
     const max_prop = max(data, (feature) => feature[property]);
 
@@ -25,14 +28,18 @@ function GeoChart({ geoData, data, property, dataIndicator, countrySelected, cha
     setMaxProp(max_prop);
   }, [data, property]);
 
+  //Ova funkcija se poziva nakon svake promjene podataka, godine i promjene velicine ekrana
   useEffect(() => {
     if (countrySelected && dataIndicator === 'world') {
       const code = countrySelected.properties.adm0_a3.toLowerCase();
+
+      //Promjena pozadinske slike u zastavu odabrane zemlje
       svg
         .select('.image_background')
         .attr('xlink:href', `https://restcountries.eu/data/${code}.svg`);
     }
 
+    //Zoom funkcija koja omogućava zoom i pan po karti
     let zoomSvg = zoom()
       .scaleExtent([1, 8])
       .on('zoom', () => {
@@ -43,12 +50,14 @@ function GeoChart({ geoData, data, property, dataIndicator, countrySelected, cha
     const colorScale = scaleLinear().domain([minProp, maxProp]).range(['#F2FEEC', '#43B929']);
 
     const { width, height } = dimensions || refWrapper.current.getBoundingClientRect();
+
+    //Mapiranje geoJson podataka
     const projection = geoMercator()
       .fitSize([width, height], countrySelected || geoData)
       .precision(100);
-
     const pathGenerator = geoPath().projection(projection);
 
+    //Funkcija se poziva nakon clicka i postavlja zemlju koja se nakon toga zoomira
     const mouseClick = function (feature) {
       changeCountry(countrySelected === feature ? null : feature);
     };
@@ -59,6 +68,7 @@ function GeoChart({ geoData, data, property, dataIndicator, countrySelected, cha
       .data(geoData.features)
       .join('path')
       .on('mousemove', (d) => {
+        //Na pomicanje miša div elementu toolTip se postvalja text sa podacima o zemlji preko koje se prelazi
         div
           .selectAll('.toolTip')
           .style('top', event.pageY - 25 + 'px')
@@ -76,8 +86,10 @@ function GeoChart({ geoData, data, property, dataIndicator, countrySelected, cha
       .on('click', mouseClick)
       .attr('class', 'country')
       .transition()
+      //Crtanje karte
       .attr('d', (feature) => pathGenerator(feature))
       .attr('fill', (feature) => {
+        //Funkcija za bojanje zemalja
         if (countrySelected) {
           if (dataIndicator === 'world' && feature === countrySelected)
             return 'url(#country_background)';
@@ -118,6 +130,7 @@ function GeoChart({ geoData, data, property, dataIndicator, countrySelected, cha
   );
 }
 
+//Redux funkcije za čitanje iz spremnika i pisanje podataka
 const mapStateToProps = (state) => ({
   countrySelected: state.countrySelected,
 });

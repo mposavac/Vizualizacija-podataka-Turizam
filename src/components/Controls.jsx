@@ -6,6 +6,7 @@ import world_img from '../assets/world.png';
 import croatia_img from '../assets/croatia.png';
 import 'rc-slider/assets/index.css';
 
+//Funkcija za prikaz kontrola za geoChart i promjenu podataka na hrvatsku ili svijet
 function Controls({
   dataIndicator,
   year,
@@ -16,17 +17,20 @@ function Controls({
   play,
   countrySelected,
 }) {
+  //Putanja za play i pause button
   const playPoints = {
     play: ['0 100, 0 0, 50 25, 50 75', '49 25, 100 50, 100 50, 49 75'],
     pause: ['0 100, 0 0, 35 0, 35 100', '65 0, 100 0, 100 100, 65 100'],
   };
 
+  //Ova se funkcija poziva nakon promjene isPLayed argumenta te animira polygon svga
   useEffect(() => {
     document
       .querySelector('.controls')
       .querySelectorAll('animate')
       .forEach((element) => element.beginElement());
   }, [isPlayed]);
+
   return (
     <div
       className="controls"
@@ -98,6 +102,7 @@ function Controls({
   );
 }
 
+//Redux funkcije za čitanje iz spremnika
 const mapStateToProps = (state) => ({
   countrySelected: state.countrySelected,
 });

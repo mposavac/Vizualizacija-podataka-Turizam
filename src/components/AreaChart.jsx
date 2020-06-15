@@ -11,18 +11,20 @@ function AreaChart({ data, dataIndicator, isByMonths, toggleMonths, changeCountr
     margin = { top: 100, left: 100, right: 100, bottom: 50 };
 
   useEffect(() => {
+    //Ukoliko postoje podaci o broju turista iscrtava se površinski graf
     if (data.properties.tourism.length > 0) {
       if (dataIndicator === 'world') setYearOrMonthsData(data.properties.tourism[0]);
       const title = data.properties.name;
       const xAxisLabel = isByMonths ? 'Month' : 'Year';
       const yAxisLabel = 'Number of tourists';
+      //Dohvačanje naziva ključeva objekata
       let keys = Object.keys(yearOrMonthsData).filter(
         (year) =>
           parseInt(year) &&
           parseInt(year) >= 1995 &&
           parseInt(year) < (dataIndicator === 'world' ? 2019 : isByMonths ? 2021 : 2020),
       );
-
+      //Regrupiranje podataka
       let new_data = keys.map((key) => {
         let tourists = yearOrMonthsData[key] === '-' ? 0 : yearOrMonthsData[key];
         return {
@@ -30,7 +32,7 @@ function AreaChart({ data, dataIndicator, isByMonths, toggleMonths, changeCountr
           numberOfTourists: tourists,
         };
       });
-
+      //Pronalaženje maksimalnog broja turista
       const max = Math.max.apply(
         Math,
         new_data.map((o) => o.numberOfTourists),
@@ -38,6 +40,7 @@ function AreaChart({ data, dataIndicator, isByMonths, toggleMonths, changeCountr
 
       const svg = select(svgRef.current);
       let xScale;
+      //Dodjeljivanje skale u ovisnosti o indikatoru i o tome jeli prikaz po mjesecima ili godinama
       if (dataIndicator === 'croatia' && isByMonths)
         xScale = scaleBand()
           .domain(keys)
@@ -51,20 +54,24 @@ function AreaChart({ data, dataIndicator, isByMonths, toggleMonths, changeCountr
         .domain([0, max])
         .range([height - margin.top, margin.top]);
 
+      //Funkcije za skaliranje podataka na x i y domeni
       const scaleXData = (point) => xScale(point.year);
       const scaleYData = (point) => yScale(point.numberOfTourists);
 
       let xAxis;
+      //Dodjeljivanje vrijednosti, broj crtica i formata na x osi
       if (dataIndicator === 'world') xAxis = axisBottom(xScale).tickFormat(format('1000'));
       else if (dataIndicator === 'croatia' && isByMonths) xAxis = axisBottom(xScale).tickSize(0);
       else xAxis = axisBottom(xScale).ticks(4).tickFormat(format('1000'));
       const yAxis = axisLeft(yScale).ticks(10, 's');
 
+      //Crtanje x-osi
       svg
         .select('.line-chart-xaxis')
         .attr('transform', `translate(0, ${height - margin.top})`)
         .call(xAxis);
 
+      //Tekst oznaka x-osi
       svg
         .select('.xaxis-label')
         .attr('transform', `translate(${width / 2}, ${height - 40})`)
@@ -80,7 +87,9 @@ function AreaChart({ data, dataIndicator, isByMonths, toggleMonths, changeCountr
           .attr('dy', '.12em')
           .attr('transform', 'rotate(65)');
 
+      //Crtanje y-osi
       svg.select('.line-chart-yaxis').attr('transform', `translate(${margin.left}, 0)`).call(yAxis);
+      //Tekst oznaka y-osi
       svg
         .select('.yaxis-label')
         .attr('transform', 'rotate(-90)')
@@ -92,13 +101,17 @@ function AreaChart({ data, dataIndicator, isByMonths, toggleMonths, changeCountr
 
       svg.append('path').attr('class', 'line-chart-line').attr('transform', `translate(2, -1)`);
 
+      //Funkcija area za crtanje površinskog grafa
       const curve = area()
         .x(scaleXData)
         .y0(height - margin.top)
         .y1(scaleYData)
         .curve(curveBasis);
 
+      //Crtanje grafa
       svg.select('.line-chart-line').transition().duration(250).attr('d', curve(new_data));
+
+      //Naslov grafa
       svg
         .select('.title')
         .attr('text-anchor', 'middle')
@@ -109,6 +122,7 @@ function AreaChart({ data, dataIndicator, isByMonths, toggleMonths, changeCountr
     //eslint-disable-next-line
   }, [data, yearOrMonthsData]);
 
+  //Funkcija za pormjenu prikaza po mjesecima (samo za hr) i izlazak iz prikaza grafa
   const handleDataChange = (e) => {
     if (e.target.getAttribute('id') === 'exit-btn') changeCountry(null);
     else if (isByMonths) {
@@ -120,6 +134,7 @@ function AreaChart({ data, dataIndicator, isByMonths, toggleMonths, changeCountr
     }
   };
 
+  //Funkcija za prikaz ikonica ljudi za odnos turista i građana
   const renderPeople = () => {
     let ratio = (
       data.properties.tourism[0][dataIndicator === 'croatia' ? 2019 : 2018] /
@@ -174,6 +189,7 @@ function AreaChart({ data, dataIndicator, isByMonths, toggleMonths, changeCountr
   );
 }
 
+//Redux funkcije za čitanje iz spremnika i pisanje podataka
 const mapStateToProps = (state) => ({
   isByMonths: state.isByMonths,
 });

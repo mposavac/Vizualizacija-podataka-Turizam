@@ -1,11 +1,7 @@
-import { useEffect, useState } from "react";
-import ResizeObserver from "resize-observer-polyfill";
+import { useEffect, useState } from 'react';
+import ResizeObserver from 'resize-observer-polyfill';
 
-/**
- * Hook, that returns the current dimensions of an HTML element.
- * Doesn't play well with SVG.
- */
-
+//React hook koja vraca vrijednost dimenzija trenutnog HTML elementa
 const useResize = (ref) => {
   const [dimensions, setDimensions] = useState(null);
   useEffect(() => {

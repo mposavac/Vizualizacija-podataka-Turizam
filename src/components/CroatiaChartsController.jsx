@@ -4,9 +4,10 @@ import PieChart from './PieChart';
 import GroupedBarChart from './GroupedBarChart';
 import CircularBarChart from './CircularBarChart';
 
+//Funkcija koja kontrolira koji se dodatni graf prikazuje
 function CroatiaChartsController({ changeCountry, countrySelected }) {
   const [chart, setChart] = useState(null);
-
+  //Funkcija za promjenu grafa ili izalaza iz prikaza dodatnih grafova
   const handleChartChange = (e) => {
     const id = e.target.getAttribute('id');
     if (id === 'exit-btn') setChart(null);
@@ -52,6 +53,7 @@ function CroatiaChartsController({ changeCountry, countrySelected }) {
   );
 }
 
+//Redux funkcije za čitanje iz spremnika i pisanje podataka
 const mapStateToProps = (store) => ({
   countrySelected: store.countrySelected,
 });
